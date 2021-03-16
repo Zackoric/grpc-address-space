@@ -1,11 +1,16 @@
 # gRPC + (Immutable) Address Space
 
 > NOTE:
+
 > * Clone the repository with `git clone --recurse-submodules ...` or
-> after cloning do a `git submodule update --init`.
+    after cloning do a `git submodule update --init`.
+
+> * Envoy recommends using `bazelisk` instead of `bazel`, see more
+    (here)[https://github.com/envoyproxy/envoy/blob/main/bazel/README.md].
+
 > * Uses the repository at
-> [3rdparty/embed-envoy-example](https://github.com/3rdparty/embed-envoy-example)
-> as a starting point for embedding Envoy as a C++ library.
+    [3rdparty/embed-envoy-example](https://github.com/3rdparty/embed-envoy-example)
+    as a starting point for embedding Envoy as a C++ library.
 
 Provides a library wrapper on top of (stout-)gRPC that includes an
 immutable address space for storing data that allows passing a
