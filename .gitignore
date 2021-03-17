@@ -1,4 +1,1 @@
-/bazel-bin
-/bazel-testlogs
-/bazel-out
-/bazel-gpc-address-space
+/bazel-*
