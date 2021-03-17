@@ -2,6 +2,8 @@ load("@rules_cc//cc:defs.bzl", "cc_library")
 
 load("@envoy//bazel:envoy_build_system.bzl", "envoy_cc_binary")
 
+load("@com_github_grpc_grpc//bazel:cc_grpc_library.bzl", "cc_grpc_library")
+
 ########################################################################
 
 envoy_cc_binary(
@@ -11,5 +13,46 @@ envoy_cc_binary(
     srcs = ["main.cc"],
     deps = [
         "@envoy//source/exe:envoy_main_embed_lib",
+    ],
+)
+
+proto_library(
+    name = "kv_store",
+    srcs = ["protos/kv_store.proto"],
+)
+
+cc_proto_library(
+    name = "kv_store_proto",
+    deps = [":kv_store"],
+)
+
+cc_grpc_library(
+    name = "kv_store_grpc",
+    srcs = [":kv_store"],
+    grpc_only = True,
+    deps = [":kv_store_proto"],
+)
+
+cc_binary(
+    name = "kv_store_server",
+    srcs = [
+        "kv_store/kv_store_server.cpp",
+        "kv_store/kv_store_server.h",
+    ],
+    deps = [
+        ":kv_store_grpc",
+        "@stout-grpc//:grpc",
+    ],
+)
+
+cc_binary(
+    name = "kv_store_client",
+    srcs = [
+        "kv_store/kv_store_client.cpp",
+        "kv_store/kv_store_client.h",
+    ],
+    deps = [
+        ":kv_store_grpc",
+        "@stout-grpc//:grpc",
     ],
 )

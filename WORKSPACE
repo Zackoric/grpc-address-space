@@ -1,5 +1,7 @@
 workspace(name = "embed-envoy-example")
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 ########################################################################
 
 local_repository(
@@ -24,3 +26,29 @@ envoy_dependency_imports()
 
 ########################################################################
 
+http_archive(
+    name = "com_github_grpc_grpc",
+    urls = ["https://github.com/grpc/grpc/archive/v1.35.0.tar.gz"],
+    sha256 = "27dd2fc5c9809ddcde8eb6fa1fa278a3486566dfc28335fca13eb8df8bd3b958",
+    strip_prefix = "grpc-1.35.0",
+)
+
+load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
+
+#For some reason, this line makes the build fail with zlib errors :(
+#grpc_deps()
+
+load("@com_github_grpc_grpc//bazel:grpc_extra_deps.bzl", "grpc_extra_deps")
+
+grpc_extra_deps()
+
+http_archive(
+    name = "stout-grpc",
+    url = "https://github.com/benh/stout-grpc/archive/0.7.0.tar.gz",
+    sha256 = "6ed6acc3928e5517eaf132a06454ed459e5a989ca5fbf5b128ca9b1f966dc1df",
+    strip_prefix = "stout-grpc-0.7.0",
+)
+
+load("@stout-grpc//bazel:stout_grpc_deps.bzl", "stout_grpc_deps")
+
+stout_grpc_deps()
