@@ -1,16 +1,14 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
-
 load("@envoy//bazel:envoy_build_system.bzl", "envoy_cc_binary")
-
 load("@com_github_grpc_grpc//bazel:cc_grpc_library.bzl", "cc_grpc_library")
 
 ########################################################################
 
 envoy_cc_binary(
     name = "embed-envoy",
-    visibility = ["//visibility:public"],
-    repository = "@envoy",
     srcs = ["main.cc"],
+    repository = "@envoy",
+    visibility = ["//visibility:public"],
     deps = [
         "@envoy//source/exe:envoy_main_embed_lib",
     ],
@@ -36,8 +34,8 @@ cc_grpc_library(
 cc_binary(
     name = "kv_store_server",
     srcs = [
-        "kv_store/kv_store_server.cpp",
-        "kv_store/kv_store_server.h",
+        "kv_store_grpc/kv_store_server.cpp",
+        "kv_store_grpc/kv_store_server.h",
     ],
     deps = [
         ":kv_store_grpc",
@@ -48,9 +46,25 @@ cc_binary(
 cc_binary(
     name = "kv_store_client",
     srcs = [
-        "kv_store/kv_store_client.cpp",
-        "kv_store/kv_store_client.h",
+        "kv_store_grpc/kv_store_client.cpp",
+        "kv_store_grpc/kv_store_client.h",
     ],
+    deps = [
+        ":kv_store_grpc",
+        "@stout-grpc//:grpc",
+    ],
+)
+
+cc_binary(
+    name = "KVStore",
+    srcs = [
+        "kv_store/kv_store.cc",
+        "kv_store/kv_store.h",
+    ],
+    #    hdrs = [
+    #        "kv_store/kv_store.h",
+    #    ],
+    #    visibility = ["//visibility:public"],
     deps = [
         ":kv_store_grpc",
         "@stout-grpc//:grpc",
