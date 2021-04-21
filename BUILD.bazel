@@ -58,6 +58,8 @@ cc_binary(
 cc_binary(
     name = "KVStore",
     srcs = [
+        "kv_store/AddressSpace.cc",
+        "kv_store/AddressSpace.h",
         "kv_store/kv_store.cc",
         "kv_store/kv_store.h",
     ],

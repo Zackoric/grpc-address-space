@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include "kv_store.h"
+#include "AddressSpace.h"
 
 MemoryKVStore::MemoryKVStore()
     : _map() {}
@@ -24,19 +25,19 @@ bool MemoryKVStore::Get(const std::string &key, std::string &value)
 }
 
 GRPCKVStore::GRPCKVStore(const std::string &address, const std::shared_ptr<::grpc::ChannelCredentials> &credentials)
-    : _client(make_shared<stout::grpc::Client>(address, credentials)) {}
+    : _client(std::make_shared<stout::grpc::Client>(address, credentials)) {}
 
 void GRPCKVStore::Set(const std::string key, const std::string value) {
   Notification<Status> done;
-  PutRequest req;
+  kv_store::PutRequest req;
   req.set_key(key);
-  req.set_value(value);
-  cout << "Calling put with (" << key << ", " << value << ")" << endl;
-  _client->Call<KV_Store, PutRequest, PutResponse>(
+  req.set_data(value);
+  std::cout << "Calling put with (" << key << ", " << value << ")" << std::endl;
+  _client->Call<kv_store::KV_Store, kv_store::PutRequest, kv_store::PutResponse>(
       "Put",
       &req,
-      [&](auto *call, shared_ptr<PutResponse> response) {
-        cout << "Put call returned with response code: " << response.get()->rescode() << endl;
+      [&](auto *call, std::shared_ptr<kv_store::PutResponse> response) {
+          std::cout << "Put call returned with response code: " << response.get()->rescode() << std::endl;
         call->Finish();
       },
       [&](auto *call, const Status &status) {
@@ -50,15 +51,15 @@ void GRPCKVStore::Set(const std::string key, const std::string value) {
 
 bool GRPCKVStore::Get(const std::string &key, std::string &value) {
   Notification<Status> done;
-  GetRequest req;
+  kv_store::GetRequest req;
   req.set_key(key);
-  cout << "Calling Get with key: " << key << endl;
-  _client->Call<KV_Store, GetRequest, GetResponse>(
+    std::cout << "Calling Get with key: " << key << std::endl;
+  _client->Call<kv_store::KV_Store, kv_store::GetRequest, kv_store::GetResponse>(
       "Get",
       &req,
-      [&](auto *call, shared_ptr<GetResponse> response) {
-        cout << "Put call returned with response code: " << response.get()->rescode() << endl;
-        cout << "Put call returned with response value: " << response.get()->value() << endl;
+      [&](auto *call, std::shared_ptr<kv_store::GetResponse> response) {
+          std::cout << "Put call returned with response code: " << response.get()->rescode() << std::endl;
+          std::cout << "Put call returned with response data: " << response.get()->data() << std::endl;
         call->Finish();
       },
       [&](auto *call, const Status &status) {
@@ -67,9 +68,18 @@ bool GRPCKVStore::Get(const std::string &key, std::string &value) {
   Status status = done.Wait();
   if (!status.ok()) {
     std::cout << "Get rpc failed: " << status.error_message() << std::endl;
+    return false;
   }
+  return true;
 }
 
 int main() {
   std::cout << "hi world." << std::endl;
+  AddressSpace space("localhost");
+  kv_store::MyStruct stru;
+  stru.set_astring("a string");
+  stru.set_anumber(42);
+  auto ref = space.Put(stru);
+  stru = space.Get<kv_store::MyStruct>(ref);
+  std::cout << stru.astring() << std::endl;
 }

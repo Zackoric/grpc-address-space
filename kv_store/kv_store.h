@@ -17,10 +17,6 @@
 using grpc::Status;
 using stout::Notification;
 
-using namespace std;
-using namespace stout;
-using namespace kv_store;
-
 struct KVInterface {
  public:
   virtual void Set(const std::string key, const std::string value) = 0;
@@ -34,7 +30,7 @@ struct GRPCKVStore: KVInterface {
   void Set(const std::string key, const std::string value);
   bool Get(const std::string &key, std::string &value);
  private:
-  shared_ptr<stout::grpc::Client> _client;
+  std::shared_ptr<stout::grpc::Client> _client;
 };
 
 struct MemoryKVStore: KVInterface {

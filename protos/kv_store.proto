@@ -30,7 +30,7 @@ service KV_Store {
 
 message PutRequest {
   string key = 1;
-  bytes value = 2;
+  string data = 2;
 }
 
 message PutResponse {
@@ -43,7 +43,7 @@ message GetRequest {
 
 message GetResponse {
   int32 resCode = 1;
-  bytes value = 2;
+  string data = 2;
 }
 
 message DelRequest {
@@ -52,4 +52,10 @@ message DelRequest {
 
 message DelResponse {
   int32 resCode = 1;
+}
+
+message MyStruct {
+  int32  aNumber = 1;
+  string aString = 2;
+  bytes someBytes = 3;
 }
