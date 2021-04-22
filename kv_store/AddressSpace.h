@@ -2,7 +2,7 @@
 // Created by zackoric on 4/18/21.
 //
 
-#ifndef GRPC_ADDRESS_SPACE_ADDRESSSPACE_H
+#ifndef GRPC_ADDRESS_SPACE_ADDRESSSPACETESTS_H
 #define GRPC_ADDRESS_SPACE_ADDRESSSPACE_H
 
 #include <string>
@@ -69,4 +69,4 @@ private:
     std::shared_ptr<GRPCKVStore> _grpc_kv;
 };
 
-#endif //GRPC_ADDRESS_SPACE_ADDRESSSPACE_H
+#endif //GRPC_ADDRESS_SPACE_ADDRESSSPACETESTS_H

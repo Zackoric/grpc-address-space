@@ -55,18 +55,18 @@ cc_binary(
     ],
 )
 
-cc_binary(
+cc_library(
     name = "KVStore",
     srcs = [
         "kv_store/AddressSpace.cc",
-        "kv_store/AddressSpace.h",
         "kv_store/kv_store.cc",
+        #        "kv_store/kv_store.h",
+    ],
+    hdrs = [
+        "kv_store/AddressSpace.h",
         "kv_store/kv_store.h",
     ],
-    #    hdrs = [
-    #        "kv_store/kv_store.h",
-    #    ],
-    #    visibility = ["//visibility:public"],
+    visibility = ["//visibility:public"],
     deps = [
         ":kv_store_grpc",
         "@stout-grpc//:grpc",

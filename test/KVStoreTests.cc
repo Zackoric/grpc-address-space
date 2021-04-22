@@ -7,9 +7,8 @@
 #include "gtest/gtest.h"
 #include "KVStoreTests.h"
 
-TEST_F(KVStoreTests, Basic)
-{
-  KVInterface store;
+TEST_F(KVStoreTests, Basic) {
+  MemoryKVStore store;
   std::string cache_value;
   EXPECT_FALSE(store.Get("my_key", cache_value));
   store.Set("my_key", "my_value");
@@ -20,21 +19,21 @@ TEST_F(KVStoreTests, Basic)
   EXPECT_EQ("another_value", cache_value);
 }
 
-TEST_F(KVStoreTests, Stress)
-{
-  KVInterface store;
+TEST_F(KVStoreTests, Stress) {
+  MemoryKVStore store;
   std::string cache_value;
-  for (int i = 0; i < 999999; i++) {
-    const std::string key = i + "", value = key;
+  const int iter = 999;
+  for (int i = 0; i < iter; i++) {
+    const std::string key = std::to_string(i), value = key;
     std::string cache_value;
     EXPECT_FALSE(store.Get(key, cache_value));
     store.Set(key, value);
     EXPECT_TRUE(store.Get(key, cache_value));
     EXPECT_EQ(cache_value, value);
   }
-  for (int i = 0; i < 999999; i++) {
-    const std::string key = i + "", value = key;
-    const std::string alt_value = (9999999 - i) + "";
+  for (int i = 0; i < iter; i++) {
+    const std::string key = std::to_string(i), value = key;
+    const std::string alt_value = std::to_string(iter - i);
     std::string cache_value;
     EXPECT_TRUE(store.Get(key, cache_value));
     EXPECT_EQ(cache_value, value);
@@ -42,11 +41,10 @@ TEST_F(KVStoreTests, Stress)
     EXPECT_TRUE(store.Get(key, cache_value));
     EXPECT_EQ(cache_value, alt_value);
   }
-  for (int i = 0; i < 999999; i++) {
-    const std::string key = i + "", value = (99999 - i) + "";
+  for (int i = 0; i < iter; i++) {
+    const std::string key = std::to_string(i), value = std::to_string(iter - i);
     std::string cache_value;
     EXPECT_TRUE(store.Get(key, cache_value));
     EXPECT_EQ(cache_value, value);
   }
-  printf("hi world!");
 }

@@ -73,13 +73,13 @@ bool GRPCKVStore::Get(const std::string &key, std::string &value) {
   return true;
 }
 
-int main() {
-  std::cout << "hi world." << std::endl;
-  AddressSpace space("localhost");
-  kv_store::MyStruct stru;
-  stru.set_astring("a string");
-  stru.set_anumber(42);
-  auto ref = space.Put(stru);
-  stru = space.Get<kv_store::MyStruct>(ref);
-  std::cout << stru.astring() << std::endl;
-}
+//int main() {
+//  std::cout << "hi world." << std::endl;
+//  AddressSpace space("localhost");
+//  kv_store::MyStruct stru;
+//  stru.set_astring("a string");
+//  stru.set_anumber(42);
+//  auto ref = space.Put(stru);
+//  stru = space.Get<kv_store::MyStruct>(ref);
+//  std::cout << stru.astring() << std::endl;
+//}
