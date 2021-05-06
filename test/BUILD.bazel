@@ -1,0 +1,33 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
+cc_test(
+    name = "KVStoreTests",
+    srcs = [
+        "KVStoreTests.cc",
+        "KVStoreTests.h",
+    ],
+    # NOTE: need to add 'linkstatic = True' in order to get this to
+    # link until https://github.com/grpc/grpc/issues/13856 gets
+    # resolved.
+    linkstatic = True,
+    deps = [
+        "//:KVStore",
+        "@gtest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "AddressSpaceTests",
+    srcs = [
+        "AddressSpaceTests.cc",
+        "AddressSpaceTests.h",
+    ],
+    # NOTE: need to add 'linkstatic = True' in order to get this to
+    # link until https://github.com/grpc/grpc/issues/13856 gets
+    # resolved.
+    linkstatic = True,
+    deps = [
+        "//:KVStore",
+        "@gtest//:gtest_main",
+    ],
+)
